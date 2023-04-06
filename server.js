@@ -5,7 +5,7 @@ require("dotenv").config();
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const ObjectId = require("mongodb").ObjectId;
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 7700;
 
 app.use(cors());
 app.use(express.json());
@@ -50,6 +50,7 @@ async function run() {
     app.post("/users", async (req, res) => {
       const user = req.body;
       const result = await usersCollection.insertOne(user);
+      console.log(user);
       res.json(result);
     });
     app.get("/users", async (req, res) => {
@@ -61,7 +62,6 @@ async function run() {
     app.put("/users/:email", async (req, res) => {
       const email = req.params.email;
       const updatedProfile = req.body;
-      //  (updatedProfile);
       const filter = { email: email };
       const updateDoc = {
         $set: { type: updatedProfile.type },
@@ -72,6 +72,7 @@ async function run() {
         updateDoc,
         options
       );
+      console.log(updatedProfile);
       res.json(result);
     });
     // GET USER BY EMAIL
@@ -79,6 +80,7 @@ async function run() {
       const email = req.params.email;
       const filter = { email: email };
       const user = await usersCollection.findOne(filter);
+      console.log(user, "ind");
       res.json(user);
     });
     // POST CLASSROOM
@@ -192,5 +194,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, () => {
-  `listening at ${port}`;
+  console.log(`listening at ${port}`);
 });
